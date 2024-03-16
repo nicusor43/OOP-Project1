@@ -11,8 +11,12 @@ IntSet::IntSet() {
 
 IntSet::IntSet(const int elements[], int newSize) {
     IntSet tempSet = vectorToSet(elements, newSize);
-    vector = tempSet.vector;
     size = tempSet.size;
+    delete[] vector;
+    vector = new int[size];
+    for (int i = 0; i < size; ++i) {
+        vector[i] = tempSet.vector[i];
+    }
 }
 
 void IntSet::addElement(int element) {
@@ -34,7 +38,6 @@ void IntSet::addElement(int element) {
     newVector[size] = element;
     delete[] vector;
     vector = new int[size + 1];
-    //vector = newVector; BAD; IDIOTIC REALLY
     for (int i = 0; i < size + 1; i++) {
         vector[i] = newVector[i];
     }
@@ -44,7 +47,7 @@ void IntSet::addElement(int element) {
 
 void IntSet::deleteElement(int element) {
     bool isInSet = false;
-    int index = 0;
+    int index;
     for (int i = 0; i <= size; i++) {
         if (vector[i] == element) {
             isInSet = true;
@@ -62,7 +65,7 @@ void IntSet::deleteElement(int element) {
     for (int i = 0; i < index; i++) {
         newVector[i] = vector[i];
     }
-    for (int i = index + 1; i < size - 1; i++) {
+    for (int i = index + 1; i < size; i++) {
         newVector[i - 1] = vector[i];
     }
 
@@ -76,6 +79,10 @@ void IntSet::deleteElement(int element) {
 }
 
 IntSet &IntSet::operator=(const IntSet &set2) {
+    // self-assignment check
+    if (this == &set2) {
+        return *this;
+    }
     delete[] this->vector;
     this->vector = new int[set2.size];
     for (int i = 0; i < set2.size; i++) {
@@ -127,6 +134,30 @@ IntSet::~IntSet() {
     delete[] vector;
 }
 
+std::ostream &operator<<(std::ostream &out, const IntSet &set) {
+    for (int i = 0; i < set.size; i++) {
+        out << set.vector[i] << " ";
+    }
+    return out;
+}
+
+// I don't know what else >> could be used for
+std::istream &operator>>(std::istream &in, IntSet &set) {
+    int newElement;
+    in >> newElement;
+    set.addElement(newElement);
+    return in;
+}
+
+IntSet::IntSet(const IntSet &other) {
+    delete[] this->vector;
+    this->vector = new int[other.size];
+    for (int i = 0; i < other.size; i++) {
+        this->vector[i] = other.vector[i]; // not going to be null; shut up clang-tidy
+    }
+}
+
+
 IntSet vectorToSet(const int elements[], int size) {
     IntSet newSet;
     for (int i = 0; i < size; i++) {
@@ -134,37 +165,6 @@ IntSet vectorToSet(const int elements[], int size) {
     }
     return newSet;
 }
-
-//IntSet::IntSet(const IntSet &other) : elements(other.elements) {
-//    this->size = other.size;
-//}
-//
-//// The default destructor is enough for this class
-//IntSet::~IntSet() {
-//    std::cout << "The destructor was called" << std::endl;
-//}
-//
-//IntSet &IntSet::operator=(const IntSet &set2) {
-//    this->elements = set2.elements;
-//    this->size = set2.size;
-//    return *this;
-//}
-//
-////IntSet &IntSet::operator=(const IntSet &set2) = default;
-//
-//int IntSet::getSize() const {
-//    return size;
-//}
-//
-//IntSet IntSet::operator+(const IntSet &set2) const {
-//    std::vector<int> newElements = elements;
-//    // TODO
-//}
-//
-//std::vector<int> IntSet::VectorToSet(std::vector<int> elements) {
-//    elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
-//    return elements;
-//}
 
 
 

@@ -17,11 +17,19 @@ public:
     IntSet();
 
     IntSet(const int *elements, int size);
-    // IntSet(const IntSet &other); todo
+
+    IntSet(const IntSet &other); // copy constructor
     ~IntSet();
+
     IntSet &operator=(const IntSet &set2);
+
     IntSet operator+(const IntSet &set2) const;
+
     IntSet operator-(const IntSet &set2) const;
+
+    friend std::ostream &operator<<(std::ostream &out, IntSet const &set);
+
+    friend std::istream &operator>>(std::istream &in, IntSet &set);
 
 
     void addElement(int element);
