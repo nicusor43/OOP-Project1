@@ -3,10 +3,10 @@ project(OOPproj1)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(OOPproj1 main.cpp
+add_executable(OOPproj1
+        main.cpp
         IntSet.cpp
-        IntSet.h)
+        IntSet.h
+        )
 
-
-
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -g -fsanitize=leak")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g -O3 -std=c++20 -pedantic-errors -Werror -Wno-unused-variable -Wno-unused-parameter -Wno-unused-but-set-variable -Wno-unused-function -Wno-unused-but-set-parameter -Wno-unused-local-typedefs -Wno-unused-private-field -Wno-unused-const-variable -Wno-unused-value")

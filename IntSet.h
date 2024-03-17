@@ -46,4 +46,6 @@ public:
 
 IntSet vectorToSet(const int elements[], int size);
 
+void readStoreWriteSet(int numberOfSets);
+
 #endif //OOPPROJ1_INTSET_H
