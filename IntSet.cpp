@@ -21,9 +21,19 @@ IntSet::IntSet(const int elements[], int newSize) {
     }
 }
 
+IntSet::IntSet(const IntSet &other) {
+    this->vector = new int[other.size];
+    this->size = other.size;
+
+    if(other.vector != nullptr) {
+        for (int i = 0; i < other.size; i++) {
+            this->vector[i] = other.vector[i];
+        }
+    }
+}
+
 void IntSet::addElement(int element) {
     bool isAlready = false;
-
     for (int i = 0; i < size; i++) {
         if (element == vector[i]) {
             isAlready = true;
@@ -143,7 +153,7 @@ void IntSet::printElements() {
     }
 }
 
-int IntSet::getSize() const {
+[[nodiscard]] int IntSet::getSize() const {
     return size;
 }
 
@@ -158,20 +168,53 @@ std::ostream &operator<<(std::ostream &out, const IntSet &set) {
     return out;
 }
 
-// I don't know what else >> could be used for
 std::istream &operator>>(std::istream &in, IntSet &set) {
-    int newElement;
-    in >> newElement;
-    set.addElement(newElement);
+    std::cout << "Introduceti numarul de elemente din multime: " << std::endl;
+    int newSize;
+    in >> newSize;
+
+    delete[] set.vector;
+    set.vector = new int[0];
+    set.size = 0;
+
+    for (int i = 0; i < newSize; i++) {
+        std::cout << "Introduce elementul " << i + 1 << " din multimea noua: ";
+        int newElement;
+        in >> newElement;
+        set.addElementEfficent(newElement);
+    }
+
     return in;
 }
 
-IntSet::IntSet(const IntSet &other) {
-    delete[] this->vector;
-    this->vector = new int[other.size];
-    for (int i = 0; i < other.size; i++) {
-        this->vector[i] = other.vector[i]; // not going to be null; shut up clang-tidy
+IntSet IntSet::operator*(const IntSet &set2) const {
+    IntSet newSet = IntSet();
+    for (int i = 0; i < this->size; i++) {
+        for (int j = 0; j < set2.size; j++) {
+            if (this->vector[i] == set2.vector[j]) {
+                newSet.addElement(this->vector[i]);
+            }
+        }
     }
+    return newSet;
+}
+
+void IntSet::addElementEfficent(int element) {
+    int newLength = size + 1;
+    int *newVector = new int[newLength];
+
+    for (int i = 0; i < size; i++) {
+        newVector[i] = vector[i];
+        if (vector[i] == element) {
+            delete[] newVector;
+            return;
+        }
+    }
+
+    newVector[size] = element;
+    delete[] vector;
+    vector = newVector;
+    size++;
 }
 
 
@@ -186,14 +229,18 @@ IntSet vectorToSet(const int elements[], int size) {
 void readStoreWriteSet(int numberOfSets) {
     std::cout << "Introduceti " << numberOfSets << " seturi." << std::endl;
     for (int i = 0; i < numberOfSets; i++) {
+
         int size;
-        std::cout << "Introduceti numarul de elemente din set: ";
+        std::cout << "Introduceti numarul de elemente din setul " << i+1 << ": ";
         std::cin >> size;
 
+        std::cout << "Introduceti elementele din setul " << i+1 << ": ";
         int *elements = new int[size];
+
         for (int j = 0; j < size; j++) {
             std::cin >> elements[j];
         }
+
         IntSet newSet = vectorToSet(elements, size);
         std::cout << std::endl << "Elementele din setul" << i+1 << " sunt: ";
         std::cout << newSet << std::endl;

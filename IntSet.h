@@ -6,8 +6,6 @@
 #define OOPPROJ1_INTSET_H
 
 #include <iostream>
-#include <algorithm>
-#include <iterator>
 
 class IntSet {
     int *vector{};
@@ -19,6 +17,7 @@ public:
     IntSet(const int *elements, int size);
 
     IntSet(const IntSet &other); // copy constructor
+
     ~IntSet();
 
     IntSet &operator=(const IntSet &set2);
@@ -27,12 +26,15 @@ public:
 
     IntSet operator-(const IntSet &set2) const;
 
+    IntSet operator*(const IntSet &set2) const;
+
     friend std::ostream &operator<<(std::ostream &out, IntSet const &set);
 
     friend std::istream &operator>>(std::istream &in, IntSet &set);
 
 
     void addElement(int element);
+    void addElementEfficent(int element);
 
     void deleteElement(int element);
 
