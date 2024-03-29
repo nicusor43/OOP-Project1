@@ -25,7 +25,7 @@ IntSet::IntSet(const IntSet &other) {
     this->vector = new int[other.size];
     this->size = other.size;
 
-    if(other.vector != nullptr) {
+    if (other.vector != nullptr) {
         for (int i = 0; i < other.size; i++) {
             this->vector[i] = other.vector[i];
         }
@@ -147,6 +147,41 @@ IntSet IntSet::operator-(const IntSet &set2) const {
     return newSet;
 }
 
+IntSet operator+(IntSet set, int x) {
+    set.addElement(x);
+    return set;
+}
+
+IntSet operator+(int x, IntSet set) {
+    set.addElement(x);
+    return set;
+}
+
+IntSet operator-(IntSet set, int x) {
+    set.deleteElement(x);
+    return set;
+}
+
+IntSet operator-(int x, IntSet set) {
+    set.deleteElement(x);
+    return set;
+}
+
+IntSet operator*(IntSet set, int x) {
+    if (set.Contains(x)) {
+        int element[] = {x};
+        return {element, 1};
+    } else return IntSet({}, 0);
+}
+
+IntSet operator*(int x, IntSet set) {
+    if (set.Contains(x)) {
+        int element[] = {x};
+        return {element, 1};
+    } else return IntSet({}, 0);
+}
+
+
 void IntSet::printElements() {
     for (int i = 0; i < size; i++) {
         std::cout << vector[i] << " ";
@@ -217,6 +252,52 @@ void IntSet::addElementEfficent(int element) {
     size++;
 }
 
+bool IntSet::Contains(int element) {
+    for (int i = 0; i < size; i++) {
+        if (vector[i] == element) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void IntSet::IncreaseWith(int amount) {
+    for (int i = 0; i < size; i++) {
+        vector[i] += amount;
+    }
+}
+
+void IntSet::OrderElements() {
+    // selection sort
+    for (int i = 0; i < size; i++) {
+        for (int j = i; j < size; j++) {
+            if (vector[i] > vector[j]) {
+                int aux = vector[j];
+                vector[j] = vector[i];
+                vector[i] = aux;
+            }
+        }
+    }
+}
+
+void IntSet::OrderElements(bool (*func)(int, int)) {
+    for (int i = 0; i < size; i++) {
+        for (int j = i; j < size; j++) {
+            if (func(vector[i], vector[j])) {
+                int aux = vector[j];
+                vector[j] = vector[i];
+                vector[i] = aux;
+            }
+        }
+    }
+}
+
+void IntSet::ApplyTransformation(int (*func)(int)) {
+    for (int i = 0; i < size; i++) {
+        vector[i] = func(vector[i]);
+    }
+}
+
 
 IntSet vectorToSet(const int elements[], int size) {
     IntSet newSet;
@@ -231,10 +312,10 @@ void readStoreWriteSet(int numberOfSets) {
     for (int i = 0; i < numberOfSets; i++) {
 
         int size;
-        std::cout << "Introduceti numarul de elemente din setul " << i+1 << ": ";
+        std::cout << "Introduceti numarul de elemente din setul " << i + 1 << ": ";
         std::cin >> size;
 
-        std::cout << "Introduceti elementele din setul " << i+1 << ": ";
+        std::cout << "Introduceti elementele din setul " << i + 1 << ": ";
         int *elements = new int[size];
 
         for (int j = 0; j < size; j++) {
@@ -242,7 +323,7 @@ void readStoreWriteSet(int numberOfSets) {
         }
 
         IntSet newSet = vectorToSet(elements, size);
-        std::cout << std::endl << "Elementele din setul" << i+1 << " sunt: ";
+        std::cout << std::endl << "Elementele din setul" << i + 1 << " sunt: ";
         std::cout << newSet << std::endl;
         delete[] elements;
     }

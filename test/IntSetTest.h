@@ -5,7 +5,7 @@
 #ifndef OOPPROJ1_INTSETTEST_H
 #define OOPPROJ1_INTSETTEST_H
 
-#include "IntSet.h"
+#include "../IntSet.h"
 #include "iostream"
 
 class IntSetTest {
@@ -21,6 +21,8 @@ public:
     static void TestMetodaVectorMultime();
     static void TestReadStoreWriteSet();
     static void TestOperatorCitire();
+
+    static void TestOrderElements();
 };
 
 

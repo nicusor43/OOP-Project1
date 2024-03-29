@@ -100,6 +100,16 @@ void IntSetTest::TestOperatorCitire() {
     std::cout << set << std::endl;
 }
 
+void IntSetTest::TestOrderElements() {
+    const int elements[] = {5, 7, 8, 4, 5};
+    auto set = IntSet(elements, 5);
+
+    std::cout << "Elementele inainte de ordonare: " << set << '\n';
+    set.OrderElements();
+    std::cout << "Elementele dupa ordonare: ";
+    std::cout << set;
+}
+
 
 
 
