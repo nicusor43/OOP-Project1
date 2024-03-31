@@ -23,6 +23,8 @@ public:
     static void TestOperatorCitire();
 
     static void TestOrderElements();
+
+    static void Test
 };
 
 

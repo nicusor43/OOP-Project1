@@ -52,6 +52,8 @@ public:
 
     void printElements();
 
+    // cerinte noi
+
     bool Contains(int element);
     void IncreaseWith(int amount);
 
